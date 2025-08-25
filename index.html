@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Menu Designer (Mobile + Photos)</title>
+  <meta name="theme-color" content="#d32f2f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <input id="logoInput" type="file" accept="image/*" title="Upload logo" />
+      <div class="brand-text">
+        <input id="restaurantName" placeholder="Restaurant name" />
+        <input id="tagline" placeholder="Tagline (optional)" />
+      </div>
+    </div>
+    <div class="controls">
+      <label>Theme
+        <select id="themeSelect">
+          <option value="classic">Classic</option>
+          <option value="modern">Modern</option>
+          <option value="elegant">Elegant</option>
+          <option value="bold">Bold</option>
+        </select>
+      </label>
+      <label>Accent <input type="color" id="accentColor" value="#d32f2f" /></label>
+      <label>Font
+        <select id="fontSelect">
+          <option value="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">Sans</option>
+          <option value="'Georgia', 'Times New Roman', serif">Serif</option>
+          <option value="'Courier New', monospace">Mono</option>
+        </select>
+      </label>
+      <button id="printBtn" title="Export to PDF via print">Export PDF</button>
+      <button id="installBtn" class="ghost" hidden>Install</button>
+    </div>
+  </header>
+
+  <main>
+    <aside class="editor">
+      <div class="panel">
+        <h2>Sections</h2>
+        <div id="sectionsList" class="list" aria-live="polite"></div>
+        <div class="row">
+          <input id="newSectionName" placeholder="Add section (e.g., Starters)" />
+          <button id="addSectionBtn">Add</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Items</h2>
+        <label>Section
+          <select id="itemSection"></select>
+        </label>
+        <input id="itemName" placeholder="Item name" />
+        <input id="itemPrice" placeholder="Price" inputmode="decimal" />
+        <textarea id="itemDesc" placeholder="Description (optional)"></textarea>
+        <label class="filelike">
+          Food photo (optional)
+          <input id="itemImage" type="file" accept="image/*" hidden />
+        </label>
+        <div class="row">
+          <button id="addItemBtn">Add item</button>
+          <button id="clearItemBtn" class="ghost">Clear</button>
+        </div>
+        <div class="hint">Tip: long-press and drag items to reorder (works on touch).</div>
+      </div>
+
+      <div class="panel">
+        <h2>Layout</h2>
+        <label>Columns
+          <select id="columnsSelect">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+          </select>
+        </label>
+        <label>Currency <input id="currencySymbol" value="$" maxlength="3" /></label>
+        <label>Show dotted leaders <input id="dotLeaders" type="checkbox" checked /></label>
+        <label>Show photos <input id="showPhotos" type="checkbox" checked /></label>
+        <label>Photo size <input id="photoSize" type="range" min="48" max="160" value="88" /></label>
+      </div>
+
+      <div class="panel">
+        <h2>Data</h2>
+        <div class="row">
+          <button id="saveBtn">Save</button>
+          <button id="loadBtn">Load</button>
+          <button id="exportJsonBtn" class="ghost">Export JSON</button>
+          <label class="filelike">
+            Import JSON
+            <input id="importJsonInput" type="file" accept="application/json" hidden />
+          </label>
+          <button id="resetBtn" class="danger">Reset</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="preview" id="preview" aria-label="Menu preview">
+      <div class="menu" id="menuCanvas">
+        <div class="menu-header">
+          <img id="logo" alt="Logo" />
+          <div class="menu-headlines">
+            <h1 id="nameOut">Restaurant</h1>
+            <p id="tagOut" class="muted">Tagline</p>
+          </div>
+        </div>
+        <div id="sectionsPreview" class="grid grid-2"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Install on your phone for one-tap access. Works offline. Use Share → Print (iOS) or Print (Android) to save as PDF.</p>
+  </footer>
+
+  <template id="sectionTemplate">
+    <div class="menu-section" draggable="false">
+      <h2 class="section-title"></h2>
+      <ul class="items"></ul>
+    </div>
+  </template>
+
+  <template id="itemTemplate">
+    <li class="menu-item" data-draggable="true">
+      <img class="thumb" alt="" />
+      <div class="content">
+        <div class="top">
+          <div class="left">
+            <span class="name"></span>
+            <span class="dots" aria-hidden="true"></span>
+          </div>
+          <div class="right price"></div>
+        </div>
+        <div class="desc muted"></div>
+      </div>
+    </li>
+  </template>
+
+  <script src="sw-register.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
